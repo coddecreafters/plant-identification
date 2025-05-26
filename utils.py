@@ -6,7 +6,7 @@ import os
 def preprocess_image(image_path):
     """Preprocess image for model prediction"""
     img = Image.open(image_path)
-    img = img.resize((128, 128))  # Updated to match model input size
+    img = img.resize((64, 64))  # Updated to match model input size
     img_array = np.array(img) / 255.0
     img_array = np.expand_dims(img_array, axis=0)
     return img_array
