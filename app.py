@@ -2,6 +2,7 @@ from flask import Flask, request, render_template, jsonify
 import os
 from werkzeug.utils import secure_filename
 from utils import load_model, predict_image
+from train import train_model
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'uploads'
@@ -10,8 +11,13 @@ app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max file size
 # Create uploads folder if it doesn't exist
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
-# Load the model
-model = load_model('plant_model.h5')
+# Load or train the model
+try:
+    model = load_model('plant_model.h5')
+except:
+    print("Model not found. Training new model...")
+    train_model()
+    model = load_model('plant_model.h5')
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
@@ -50,4 +56,4 @@ def predict():
     return jsonify({'error': 'Invalid file type'})
 
 if __name__ == '__main__':
-    app.run(debug=True) 
+    app.run(debug=True)
