@@ -34,15 +34,15 @@ def train_model():
     # Create data generators
     train_generator = train_datagen.flow_from_directory(
         train_dir,
-        target_size=(224, 224),  # Updated to match model input size
-        batch_size=8,
+        target_size=(224, 224),
+        batch_size=16,  # Increased batch size
         class_mode='categorical'
     )
 
     validation_generator = validation_datagen.flow_from_directory(
         validation_dir,
-        target_size=(224, 224),  # Updated to match model input size
-        batch_size=8,
+        target_size=(224, 224),
+        batch_size=16,  # Increased batch size
         class_mode='categorical'
     )
 
@@ -54,7 +54,7 @@ def train_model():
     history = model.fit(
         train_generator,
         steps_per_epoch=train_generator.samples // train_generator.batch_size,
-        epochs=3,
+        epochs=5,  # Increased epochs for better accuracy with smaller model
         validation_data=validation_generator,
         validation_steps=validation_generator.samples // validation_generator.batch_size
     )
@@ -65,7 +65,7 @@ def train_model():
     gc.collect()
 
     # Save the model
-    model.save('plant_model.h5')
+    model.save('plant_model.h5', save_format='h5')
     print("Model saved as 'plant_model.h5'")
 
 if __name__ == '__main__':
