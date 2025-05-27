@@ -5,15 +5,6 @@ import os
 import gc
 
 def train_model():
-    # Enable memory growth
-    gpus = tf.config.experimental.list_physical_devices('GPU')
-    if gpus:
-        try:
-            for gpu in gpus:
-                tf.config.experimental.set_memory_growth(gpu, True)
-        except RuntimeError as e:
-            print(e)
-
     # Define data directories
     train_dir = 'dataset/train'
     validation_dir = 'dataset/validation'
@@ -35,14 +26,14 @@ def train_model():
     train_generator = train_datagen.flow_from_directory(
         train_dir,
         target_size=(224, 224),
-        batch_size=16,  # Increased batch size
+        batch_size=32,  # Increased batch size for faster training
         class_mode='categorical'
     )
 
     validation_generator = validation_datagen.flow_from_directory(
         validation_dir,
         target_size=(224, 224),
-        batch_size=16,  # Increased batch size
+        batch_size=32,
         class_mode='categorical'
     )
 
@@ -54,7 +45,7 @@ def train_model():
     history = model.fit(
         train_generator,
         steps_per_epoch=train_generator.samples // train_generator.batch_size,
-        epochs=5,  # Increased epochs for better accuracy with smaller model
+        epochs=10,  # More epochs to compensate for smaller model
         validation_data=validation_generator,
         validation_steps=validation_generator.samples // validation_generator.batch_size
     )
@@ -64,8 +55,8 @@ def train_model():
     del validation_generator
     gc.collect()
 
-    # Save the model
-    model.save('plant_model.h5', save_format='h5')
+    # Save the model with minimal size
+    model.save('plant_model.h5', save_format='h5', include_optimizer=False)
     print("Model saved as 'plant_model.h5'")
 
 if __name__ == '__main__':
