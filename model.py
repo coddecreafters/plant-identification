@@ -12,14 +12,22 @@ def create_model(num_classes):
             print(e)
 
     model = models.Sequential([
-        # Single Convolutional Block
-        layers.Conv2D(8, (3, 3), activation='relu', input_shape=(64, 64, 3)),
+        # First Convolutional Block
+        layers.Conv2D(32, (3, 3), activation='relu', input_shape=(224, 224, 3)),
+        layers.MaxPooling2D((2, 2)),
+        
+        # Second Convolutional Block
+        layers.Conv2D(64, (3, 3), activation='relu'),
+        layers.MaxPooling2D((2, 2)),
+        
+        # Third Convolutional Block
+        layers.Conv2D(64, (3, 3), activation='relu'),
         layers.MaxPooling2D((2, 2)),
         
         # Flatten and Dense Layers
         layers.Flatten(),
-        layers.Dense(16, activation='relu'),
-        layers.Dropout(0.2),
+        layers.Dense(64, activation='relu'),
+        layers.Dropout(0.5),
         layers.Dense(num_classes, activation='softmax')
     ])
     
