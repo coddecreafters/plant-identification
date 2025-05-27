@@ -6,7 +6,7 @@ import os
 def preprocess_image(image_path):
     """Preprocess image for model prediction"""
     img = Image.open(image_path)
-    img = img.resize((64, 64))  # Updated to match model input size
+    img = img.resize((224, 224))  # Changed from 64x64 to 224x224
     img_array = np.array(img) / 255.0
     img_array = np.expand_dims(img_array, axis=0)
     return img_array
@@ -17,6 +17,7 @@ def load_model(model_path):
 
 def get_class_names():
     """Get class names from the dataset directory"""
+    # Updated class names to match the exact folder names
     return ['roses', 'sunflowers', 'tulips']
 
 def predict_image(model, image_path):
