@@ -34,15 +34,15 @@ def train_model():
     # Create data generators
     train_generator = train_datagen.flow_from_directory(
         train_dir,
-        target_size=(64, 64),  # Updated to match model input size
-        batch_size=8,  # Reduced batch size
+        target_size=(224, 224),  # Updated to match model input size
+        batch_size=8,
         class_mode='categorical'
     )
 
     validation_generator = validation_datagen.flow_from_directory(
         validation_dir,
-        target_size=(64, 64),  # Updated to match model input size
-        batch_size=8,  # Reduced batch size
+        target_size=(224, 224),  # Updated to match model input size
+        batch_size=8,
         class_mode='categorical'
     )
 
@@ -54,7 +54,7 @@ def train_model():
     history = model.fit(
         train_generator,
         steps_per_epoch=train_generator.samples // train_generator.batch_size,
-        epochs=3,  # Reduced number of epochs
+        epochs=3,
         validation_data=validation_generator,
         validation_steps=validation_generator.samples // validation_generator.batch_size
     )
